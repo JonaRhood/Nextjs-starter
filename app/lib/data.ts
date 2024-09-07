@@ -32,16 +32,16 @@ export async function fetchLatestInvoices() {
   try {
     const data = await sql<LatestInvoiceRaw>`
     WITH latest_invoices AS (
-      SELECT DISTINCT ON (customers.id) 
-        invoices.amount, 
-        customers.name, 
-        customers.image_url, 
-        customers.email, 
-        invoices.id,
-        invoices.date
-      FROM invoices
-      JOIN customers ON invoices.customer_id = customers.id
-      ORDER BY customers.id, invoices.date DESC
+      SELECT DISTINCT ON (invoices.id)
+             invoices.amount, 
+             customers.name, 
+             customers.image_url, 
+             customers.email, 
+             invoices.id,
+             invoices.date
+        FROM invoices
+        JOIN customers ON invoices.customer_id = customers.id
+        ORDER BY invoices.id, invoices.date DESC
     )
     SELECT *
     FROM latest_invoices
@@ -94,7 +94,7 @@ export async function fetchCardData() {
   }
 }
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 8;
 export async function fetchFilteredInvoices(
   query: string,
   currentPage: number,
